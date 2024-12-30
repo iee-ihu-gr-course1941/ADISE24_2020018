@@ -1,3 +1,7 @@
 console.suo
 
-**/db_upass
+lib/db_upass.php
+*.exe
+db_upass.php
+*.log
+log/*
