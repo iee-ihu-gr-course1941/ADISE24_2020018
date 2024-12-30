@@ -1,0 +1,29 @@
+#quirkle_table {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100%;
+}
+
+.quirkle_square {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+}
+
+.quirkle_tile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    object-fit: cover; 
+}
+
+
+
