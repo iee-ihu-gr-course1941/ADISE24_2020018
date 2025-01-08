@@ -22,11 +22,33 @@
     </header>
 
     <div class="container">
-        <h1 class="mt-4">Quirkle</h1>
-        <div id='quirkle_board' class="my-4">
-            <!-- Ο πίνακας θα δημιουργηθεί δυναμικά -->
+        <div>
+            <h1 class="mt-4">Quirkle</h1>
+            <div id="quirkle_board" class="my-4">
+                <!-- Ο πίνακας θα δημιουργηθεί δυναμικά -->
+            </div>
+            <button id="quirkle_reset" class="btn btn-primary">ΕΝΑΡΞΗ</button>
         </div>
-        <button id='quirkle_reset' class='btn btn-primary'>ΕΝΑΡΞΗ</button>
+    
+        <div>
+
+            <div id="game_initializer">
+                <input id="username">
+                <button id="quirkle_login" class="btn btn-primary">ΕΙΣΟΔΟΣ ΣΤΟ ΠΑΙΧΝΙΔΙ</button><br>
+            </div>
+    
+            <div id="game_info">
+
+            </div>
+    
+            <div id="move_div">
+                Δώσε κίνηση (Color Shape x y): <input id="the_move">
+                <button id="do_move" class="btn btn-primary">ΚΑΝΕ ΤΗΝ ΚΙΝΗΣΗ</button><br>
+            </div>
+
+        </div>
     </div>
+
+
 </body>
 </html>
