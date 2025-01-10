@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Διακομιστής:                  127.0.0.1
--- Έκδοση διακομιστή:            10.11.6-MariaDB-0+deb12u1-log - Debian 12
--- Λειτ. σύστημα διακομιστή:     debian-linux-gnu
+-- Έκδοση διακομιστή:            10.4.32-MariaDB - mariadb.org binary distribution
+-- Λειτ. σύστημα διακομιστή:     Win64
 -- HeidiSQL Έκδοση:              12.8.0.6908
 -- --------------------------------------------------------
 
@@ -297,34 +297,34 @@ BEGIN
     DECLARE tile_shape2 ENUM('Circle', 'Square', '4Star', 'Diamond', 'Clover', '8Star');
 
 
-
+    -- Κατανομή πλακιδίων
     WHILE i < 6 DO
-
+        -- Επιλογή τυχαίου πλακιδίου για τον player1
         SELECT tile_id, tile_color, tile_shape
         INTO selected_tile_id, tile_color1, tile_shape1
         FROM tiles_pool
         ORDER BY RAND()
         LIMIT 1;
         
-
+        -- Προσθήκη πλακιδίου στον player1
         INSERT INTO player_tiles (username, tile_color, tile_shape)
         VALUES (player1_username, tile_color1, tile_shape1);
         
-
+        -- Διαγραφή πλακιδίου από το tiles_pool
         DELETE FROM tiles_pool WHERE tile_id = selected_tile_id;
 
-
+        -- Επιλογή τυχαίου πλακιδίου για τον player2
         SELECT tile_id, tile_color, tile_shape
         INTO selected_tile_id, tile_color2, tile_shape2
         FROM tiles_pool
         ORDER BY RAND()
         LIMIT 1;
         
-
+        -- Προσθήκη πλακιδίου στον player2
         INSERT INTO player_tiles (username, tile_color, tile_shape)
         VALUES (player2_username, tile_color2, tile_shape2);
 
-
+        -- Διαγραφή πλακιδίου από το tiles_pool
         DELETE FROM tiles_pool WHERE tile_id = selected_tile_id;
 
         SET i = i + 1;
@@ -344,7 +344,7 @@ CREATE TABLE IF NOT EXISTS `game_status` (
 
 -- Dumping data for table qwirkle.game_status: ~1 rows (approximately)
 INSERT INTO `game_status` (`game_id`, `status`, `p_turn`, `result`, `last_change`) VALUES
-	(3, 'not active', NULL, NULL, '2025-01-10 15:42:56');
+	(3, 'aborted', NULL, NULL, '2025-01-10 19:30:38');
 
 -- Dumping structure for procedure qwirkle.place_tile3
 DELIMITER //
@@ -374,6 +374,7 @@ BEGIN
 
             DELETE FROM player_tiles
             WHERE player_tile_id = p_tile_id;
+
 END//
 DELIMITER ;
 
@@ -386,22 +387,61 @@ CREATE TABLE IF NOT EXISTS `players` (
   `last_action` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`player_id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table qwirkle.players: ~0 rows (approximately)
+-- Dumping data for table qwirkle.players: ~24 rows (approximately)
+INSERT INTO `players` (`player_id`, `username`, `score`, `token`, `last_action`) VALUES
+	(62, NULL, 0, NULL, '2025-01-10 12:53:08'),
+	(63, NULL, 0, NULL, '2025-01-10 12:53:08'),
+	(64, NULL, 0, NULL, '2025-01-10 12:53:08'),
+	(65, NULL, 0, NULL, '2025-01-10 12:53:08'),
+	(66, NULL, 0, NULL, '2025-01-10 12:59:36'),
+	(67, NULL, 0, NULL, '2025-01-10 13:09:13'),
+	(68, NULL, 0, NULL, '2025-01-10 13:09:13'),
+	(89, NULL, 4, NULL, '2025-01-10 13:54:53'),
+	(90, NULL, 0, NULL, '2025-01-10 13:54:53'),
+	(96, NULL, 0, NULL, '2025-01-10 14:35:54'),
+	(97, NULL, 0, NULL, '2025-01-10 14:35:54'),
+	(106, NULL, 2, NULL, '2025-01-10 14:50:47'),
+	(107, NULL, 0, NULL, '2025-01-10 14:50:47'),
+	(108, NULL, 1, NULL, '2025-01-10 15:02:49'),
+	(109, NULL, 0, NULL, '2025-01-10 15:02:49'),
+	(110, NULL, 0, NULL, '2025-01-10 15:11:19'),
+	(111, NULL, 0, NULL, '2025-01-10 15:11:19'),
+	(116, NULL, 0, NULL, '2025-01-10 17:56:43'),
+	(117, NULL, 0, NULL, '2025-01-10 17:56:43'),
+	(123, NULL, 10, NULL, '2025-01-10 18:49:22'),
+	(124, NULL, 0, NULL, '2025-01-10 18:49:22'),
+	(125, NULL, 1, NULL, '2025-01-10 19:25:32'),
+	(126, NULL, 0, NULL, '2025-01-10 19:25:32'),
+	(127, 'makis', 0, 'c1e0425fd3081a7cb0bc432f62bae8ec', '2025-01-10 19:25:32'),
+	(128, 'takis', 0, '88eb15abae86f42a8bc1301f69db4990', '2025-01-10 19:25:36');
 
 -- Dumping structure for πίνακας qwirkle.player_tiles
 CREATE TABLE IF NOT EXISTS `player_tiles` (
   `player_tile_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) DEFAULT NULL,
+  `username` varchar(20) NOT NULL,
   `tile_color` enum('Red','Blue','Green','Yellow','Orange','Purple') NOT NULL,
   `tile_shape` enum('Circle','Square','4Star','Diamond','Clover','8Star') NOT NULL,
   PRIMARY KEY (`player_tile_id`),
   KEY `username` (`username`),
   CONSTRAINT `player_tiles_ibfk_1` FOREIGN KEY (`username`) REFERENCES `players` (`username`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table qwirkle.player_tiles: ~0 rows (approximately)
+-- Dumping data for table qwirkle.player_tiles: ~12 rows (approximately)
+INSERT INTO `player_tiles` (`player_tile_id`, `username`, `tile_color`, `tile_shape`) VALUES
+	(69, 'makis', 'Yellow', '8Star'),
+	(70, 'takis', 'Green', 'Square'),
+	(71, 'makis', 'Purple', 'Diamond'),
+	(72, 'takis', 'Red', '4Star'),
+	(73, 'makis', 'Green', 'Circle'),
+	(74, 'takis', 'Purple', 'Square'),
+	(75, 'makis', 'Red', '8Star'),
+	(76, 'takis', 'Purple', 'Clover'),
+	(77, 'makis', 'Red', 'Diamond'),
+	(78, 'takis', 'Green', 'Diamond'),
+	(79, 'makis', 'Blue', 'Diamond'),
+	(80, 'takis', 'Orange', '4Star');
 
 -- Dumping structure for procedure qwirkle.refill_tiles
 DELIMITER //
@@ -414,6 +454,48 @@ BEGIN
     DECLARE t_shape ENUM('Circle', 'Square', '4Star', 'Diamond', 'Clover', '8Star');
 
 
+
+    -- Κατανομή πλακιδίων
+    WHILE i < num_tiles DO
+        -- Επιλογή τυχαίου πλακιδίου από το tiles_pool
+        SELECT tile_id, tile_color, tile_shape 
+        INTO selected_tile_id, t_color, t_shape
+        FROM tiles_pool
+        ORDER BY RAND()
+        LIMIT 1;
+
+        -- Εισαγωγή του πλακιδίου στον πίνακα players_tiles
+        IF selected_tile_id IS NOT NULL THEN
+            INSERT INTO player_tiles (username, tile_color, tile_shape)
+            VALUES (player_username, t_color, t_shape);
+
+            -- Διαγραφή του πλακιδίου από το tiles_pool
+            DELETE FROM tiles_pool WHERE tile_id = selected_tile_id;
+        END IF;
+
+        SET i = i + 1;
+    END WHILE;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure qwirkle.refill_tiles2
+DELIMITER //
+CREATE PROCEDURE `refill_tiles2`(player_username VARCHAR(20), num_tiles INT)
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    DECLARE selected_tile_id INT;
+    DECLARE available_tiles INT;
+
+    DECLARE t_color ENUM('Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple');
+    DECLARE t_shape ENUM('Circle', 'Square', '4Star', 'Diamond', 'Clover', '8Star');
+
+    -- Ελέγχουμε πόσα tiles υπάρχουν στο tiles_pool
+    SELECT COUNT(*) INTO available_tiles
+    FROM tiles_pool;
+
+    -- Ορίζουμε τον αριθμό των tiles που θα πάρουμε (πρέπει να είναι το μικρότερο από το num_tiles και τα διαθέσιμα tiles)
+    SET num_tiles = LEAST(num_tiles, available_tiles);
+
     WHILE i < num_tiles DO
 
         SELECT tile_id, tile_color, tile_shape 
@@ -422,11 +504,9 @@ BEGIN
         ORDER BY RAND()
         LIMIT 1;
 
-
         IF selected_tile_id IS NOT NULL THEN
             INSERT INTO player_tiles (username, tile_color, tile_shape)
             VALUES (player_username, t_color, t_shape);
-
 
             DELETE FROM tiles_pool WHERE tile_id = selected_tile_id;
         END IF;
@@ -494,9 +574,117 @@ CREATE TABLE IF NOT EXISTS `tiles_pool` (
   `tile_color` enum('Red','Blue','Green','Yellow','Orange','Purple') NOT NULL,
   `tile_shape` enum('Circle','Square','4Star','Diamond','Clover','8Star') NOT NULL,
   PRIMARY KEY (`tile_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table qwirkle.tiles_pool: ~0 rows (approximately)
+-- Dumping data for table qwirkle.tiles_pool: ~96 rows (approximately)
+INSERT INTO `tiles_pool` (`tile_id`, `tile_color`, `tile_shape`) VALUES
+	(1, 'Red', 'Circle'),
+	(2, 'Red', 'Square'),
+	(3, 'Red', '4Star'),
+	(4, 'Red', 'Diamond'),
+	(5, 'Red', 'Clover'),
+	(7, 'Blue', 'Circle'),
+	(8, 'Blue', 'Square'),
+	(9, 'Blue', '4Star'),
+	(10, 'Blue', 'Diamond'),
+	(11, 'Blue', 'Clover'),
+	(12, 'Blue', '8Star'),
+	(13, 'Green', 'Circle'),
+	(14, 'Green', 'Square'),
+	(15, 'Green', '4Star'),
+	(17, 'Green', 'Clover'),
+	(18, 'Green', '8Star'),
+	(19, 'Yellow', 'Circle'),
+	(20, 'Yellow', 'Square'),
+	(21, 'Yellow', '4Star'),
+	(22, 'Yellow', 'Diamond'),
+	(23, 'Yellow', 'Clover'),
+	(24, 'Yellow', '8Star'),
+	(25, 'Orange', 'Circle'),
+	(26, 'Orange', 'Square'),
+	(27, 'Orange', '4Star'),
+	(28, 'Orange', 'Diamond'),
+	(29, 'Orange', 'Clover'),
+	(30, 'Orange', '8Star'),
+	(31, 'Purple', 'Circle'),
+	(33, 'Purple', '4Star'),
+	(34, 'Purple', 'Diamond'),
+	(36, 'Purple', '8Star'),
+	(37, 'Red', 'Circle'),
+	(38, 'Red', 'Square'),
+	(40, 'Red', 'Diamond'),
+	(41, 'Red', 'Clover'),
+	(42, 'Red', '8Star'),
+	(43, 'Blue', 'Circle'),
+	(44, 'Blue', 'Square'),
+	(45, 'Blue', '4Star'),
+	(47, 'Blue', 'Clover'),
+	(48, 'Blue', '8Star'),
+	(49, 'Green', 'Circle'),
+	(50, 'Green', 'Square'),
+	(51, 'Green', '4Star'),
+	(52, 'Green', 'Diamond'),
+	(53, 'Green', 'Clover'),
+	(54, 'Green', '8Star'),
+	(55, 'Yellow', 'Circle'),
+	(56, 'Yellow', 'Square'),
+	(57, 'Yellow', '4Star'),
+	(58, 'Yellow', 'Diamond'),
+	(59, 'Yellow', 'Clover'),
+	(60, 'Yellow', '8Star'),
+	(61, 'Orange', 'Circle'),
+	(62, 'Orange', 'Square'),
+	(64, 'Orange', 'Diamond'),
+	(65, 'Orange', 'Clover'),
+	(66, 'Orange', '8Star'),
+	(67, 'Purple', 'Circle'),
+	(68, 'Purple', 'Square'),
+	(69, 'Purple', '4Star'),
+	(70, 'Purple', 'Diamond'),
+	(71, 'Purple', 'Clover'),
+	(72, 'Purple', '8Star'),
+	(73, 'Red', 'Circle'),
+	(74, 'Red', 'Square'),
+	(75, 'Red', '4Star'),
+	(77, 'Red', 'Clover'),
+	(78, 'Red', '8Star'),
+	(79, 'Blue', 'Circle'),
+	(80, 'Blue', 'Square'),
+	(81, 'Blue', '4Star'),
+	(82, 'Blue', 'Diamond'),
+	(83, 'Blue', 'Clover'),
+	(84, 'Blue', '8Star'),
+	(87, 'Green', '4Star'),
+	(88, 'Green', 'Diamond'),
+	(89, 'Green', 'Clover'),
+	(90, 'Green', '8Star'),
+	(91, 'Yellow', 'Circle'),
+	(92, 'Yellow', 'Square'),
+	(93, 'Yellow', '4Star'),
+	(94, 'Yellow', 'Diamond'),
+	(95, 'Yellow', 'Clover'),
+	(97, 'Orange', 'Circle'),
+	(98, 'Orange', 'Square'),
+	(99, 'Orange', '4Star'),
+	(100, 'Orange', 'Diamond'),
+	(101, 'Orange', 'Clover'),
+	(102, 'Orange', '8Star'),
+	(103, 'Purple', 'Circle'),
+	(104, 'Purple', 'Square'),
+	(105, 'Purple', '4Star'),
+	(107, 'Purple', 'Clover'),
+	(108, 'Purple', '8Star');
+
+-- Dumping structure for trigger qwirkle.game_status_update
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER game_status_update BEFORE UPDATE
+ON game_status
+FOR EACH ROW BEGIN
+SET NEW.last_change = NOW();
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
