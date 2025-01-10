@@ -347,7 +347,7 @@
 			$tiles_to_add = count($tile_numbers);
 
 			// Κλήση της συνάρτησης refill_tiles για τυχαία επιλογή πλακιδίων
-			$sql_random_tiles = "CALL refill_tiles(?, ?)";
+			$sql_random_tiles = "CALL refill_tiles2(?, ?)";
 			$stmt = $mysqli->prepare($sql_random_tiles);
 			$stmt->bind_param('si', $player_username, $tiles_to_add);
 			$stmt->execute();

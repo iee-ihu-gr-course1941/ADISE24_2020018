@@ -166,6 +166,8 @@ function read_status() {
 function switch_player_turn($token) {
     // Βρίσκουμε το username του παίκτη από το token
     $player_username = current_user($token);
+    global $mysqli;
+
 
     if ($player_username == null) {
         header("HTTP/1.1 400 Bad Request");
@@ -173,7 +175,24 @@ function switch_player_turn($token) {
         exit;
     }
 
-    global $mysqli;
+    // Αντικαθιστούμε τα πλακίδια πίσω στον χρήστη
+    $sql = 'SELECT COUNT(*) AS tile_count FROM player_tiles WHERE username = ?';
+
+    $st = $mysqli->prepare($sql);
+    $st->bind_param("s", $player_username);
+    $st->execute();
+    $res = $st->get_result();
+    $row = $res->fetch_assoc();
+    $tile_count = $row['tile_count'];
+    $missing_tiles = 6 - $tile_count;
+
+    if($missing_tiles !=0 ){
+        $sql_random_tiles = "CALL refill_tiles2(?, ?)";
+        $stmt = $mysqli->prepare($sql_random_tiles);
+        $stmt->bind_param('si', $player_username, $missing_tiles);
+        $stmt->execute();
+    }
+
 
     // Βρίσκουμε το game_id από τον πίνακα game_status
     $sql = 'SELECT game_id FROM game_status WHERE p_turn = ?';
