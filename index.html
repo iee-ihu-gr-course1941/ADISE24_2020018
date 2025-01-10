@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>ΑΔΙΣΕ: Quirkle</title>
+    <title>ΑΔΙΣΕ: Qwirkle</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="css/myquirkle.css" rel="stylesheet">
+    <link href="css/myqwirkle.css" rel="stylesheet">
     <script src="bootstrap/jquery-3.2.1.min.js"></script>
     <script src="bootstrap/bootstrap.min.js"></script>
-    <script src="js/myquirkle.js"></script>
+    <script src="js/myqwirkle.js"></script>
 </head>
 <body>
     <header class="bg-light py-3">
@@ -23,14 +23,14 @@
 
     <div class="container">
         <div>
-            <h1 class="mt-4">Quirkle</h1>
+            <h1 class="mt-4">Qwirkle</h1>
             <div id="quirkle_board" class="my-4">
                 <!-- Ο πίνακας θα δημιουργηθεί δυναμικά -->
             </div>
-            <button id="quirkle_reset" class="btn btn-primary">ΕΝΑΡΞΗ</button>
+            <button id="quirkle_reset" class="btn btn-primary">RESET</button>
         </div>
     
-        <div>
+        <div id="game">
 
             <div id="game_initializer">
                 <input id="username">
@@ -42,9 +42,56 @@
             </div>
     
             <div id="move_div">
-                Δώσε κίνηση (Color Shape x y): <input id="the_move">
+                Δώσε κίνηση (Χρώμα Σχήμα x y): <input id="the_move">
                 <button id="do_move" class="btn btn-primary">ΚΑΝΕ ΤΗΝ ΚΙΝΗΣΗ</button><br>
+                <button id="change_turn" class="btn btn-primary">ΤΕΛΟΣ ΠΑΙΞΙΑΣ</button><br>
+
+
+
             </div>
+
+            
+            <div id="tiles">
+                Διαθέσιμα πλακίδια:
+                <table id="table_tiles" class="quirkle_table">
+                    <tr>
+                        <td id="square_1" class="quirkle_square"></td>
+                        <td id="square_2" class="quirkle_square"></td>
+                        <td id="square_3" class="quirkle_square"></td>
+                        <td id="square_4" class="quirkle_square"></td>
+                        <td id="square_5" class="quirkle_square"></td>
+                        <td id="square_6" class="quirkle_square"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tiles_info"></div>
+
+            <div id="change">
+                Δώσε πλακίδια για αλλαγή (1,2...): <input id="tiles_for_change">
+                <button id="change_tiles" class="btn btn-primary">ΑΛΛΑΓΗ</button><br>
+
+            </div>
+
+            <div id="opponent_tiles">
+                                
+            </div>
+
+            
+            <div id="game-data">
+                <div class="info-box" id="score-box">
+                    <h2>Σκορ</h2>
+                    <div class="player-score">
+                        <p><strong>Εγώ:</strong> <span id="your-score"></span></p>
+                        <p><strong>Αντίπαλος:</strong> <span id="opponent-score"></span></p>
+                    </div>
+                </div>
+                <div class="info-box" id="tiles-box">
+                    <h2>Πλακίδια Αντιπάλου</h2>
+                    <p><span id="opponent-tiles"></span></p>
+                </div>
+            </div>
+          
 
         </div>
     </div>
